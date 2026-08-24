@@ -15,12 +15,17 @@ async function main() {
   
   const commandArgs = {}
   
-  if (cmd === 'gate' && args.length >= 3) {
+  if (cmd === 'gate' && args.length >= 2) {
     commandArgs.phase = parseInt(args[1])
-    commandArgs.action = args[2]
-  } else if (cmd === 'gate' && args.length === 2) {
-    commandArgs.phase = parseInt(args[1])
-    commandArgs.action = 'check'
+    commandArgs.action = args.length >= 3 ? args[2] : 'check'
+    for (let i = 3; i < args.length; i++) {
+      if (args[i].startsWith('--')) {
+        const key = args[i].slice(2)
+        const value = args[i + 1] || 'true'
+        commandArgs[key] = value === 'true' ? true : value === 'false' ? false : value
+        i++
+      }
+    }
   } else {
     for (let i = 1; i < args.length; i++) {
       if (args[i].startsWith('--')) {
