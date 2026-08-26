@@ -21,7 +21,8 @@ export const artifactCheckMiddleware = {
     state: SddState,
     projectDir: string
   ): ArtifactResult {
-    if (phase === Phase.REVIEW || phase === Phase.PERSISTENCE) {
+    if (phase === Phase.PERSISTENCE) {
+      // Phase 6 (PERSISTENCE) 才要求 review 已存在；Phase 5 (REVIEW) 是「生成」review 的地方，不能要求已存在（否则死锁）
       const missing: string[] = []
 
       for (const pattern of REQUIRED_REVIEW_ARTIFACTS) {
